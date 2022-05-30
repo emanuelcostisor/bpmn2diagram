@@ -57,5 +57,5 @@ with Diagram(name, direction='LR'):
         for target in path[node]['target']:
             try:
                 path[node]['node'] >> path[target]['node']
-            except:
-                print('error')
+            except Exception as e:
+                print(e)
