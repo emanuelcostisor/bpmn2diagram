@@ -12,7 +12,14 @@ from diagrams.azure.analytics import DataLakeAnalytics
 
 parser = argparse.ArgumentParser()
 parser.add_argument('bpmn')
+parser.add_argument('direction', nargs='?', default='TB')
 args = parser.parse_args()
+
+args.direction = args.direction.upper()
+if (args.direction not in ['TB', 'BT', 'LR', 'RL']):
+    print(
+        f'Invalid direction param {args.direction} reverting to default, "TB"')
+    args.direction = 'TB'
 
 tree = None
 
@@ -40,7 +47,7 @@ def icon(element):
         return DataLakeAnalytics(element.attrib['id'])
 
 
-with Diagram(name, direction='LR'):
+with Diagram(name, direction=args.direction):
     for element in root[0]:
         if 'id' in element.attrib and 'sequenceFlow' not in element.tag:
             if element.attrib['id'] not in path:
