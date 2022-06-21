@@ -57,7 +57,8 @@ with Diagram(name, direction=args.direction):
                 if 'attachedToRef' in element.attrib:
                     path[element.attrib['attachedToRef']]['target'].append(
                         element.attrib['id'])
-        elif 'sourceRef' in element.attrib:
+    for element in root[0]:
+        if 'sourceRef' in element.attrib:
             path[element.attrib['sourceRef']]['target'].append(
                 element.attrib['targetRef'])
     for node in path:
