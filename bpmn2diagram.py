@@ -9,6 +9,7 @@ from diagrams.aws.network import ELB
 from diagrams.azure.general import Quickstartcenter
 from diagrams.azure.general import Azurehome
 from diagrams.azure.analytics import DataLakeAnalytics
+from diagrams.onprem.network import Internet
 
 parser = argparse.ArgumentParser()
 parser.add_argument('bpmn')
@@ -16,7 +17,7 @@ parser.add_argument('direction', nargs='?', default='TB')
 args = parser.parse_args()
 
 args.direction = args.direction.upper()
-if (args.direction not in ['TB', 'BT', 'LR', 'RL']):
+if args.direction not in ['TB', 'BT', 'LR', 'RL']:
     print(
         f'Invalid direction param {args.direction} reverting to default, "TB"')
     args.direction = 'TB'
@@ -34,6 +35,8 @@ path = {}
 
 def icon(element):
     if 'serviceTask' in element.tag:
+        if '{http://activiti.org/bpmn}delegateExpression' in element.attrib and element.attrib['{http://activiti.org/bpmn}delegateExpression'] == '${httpRequestorTask}':
+            return Internet(element.attrib['id'])
         return EC2(element.attrib['id'])
     elif 'userTask' in element.tag:
         return User(element.attrib['id'])
