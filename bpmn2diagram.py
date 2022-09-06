@@ -10,6 +10,8 @@ from diagrams.azure.general import Quickstartcenter
 from diagrams.azure.general import Azurehome
 from diagrams.azure.analytics import DataLakeAnalytics
 from diagrams.onprem.network import Internet
+from diagrams.azure.compute import CloudServices
+from diagrams.azure.ml import MachineLearningStudioWebServicePlans
 
 parser = argparse.ArgumentParser()
 parser.add_argument('bpmn')
@@ -46,6 +48,10 @@ def icon(element):
         return Quickstartcenter(element.attrib['id'])
     elif 'endEvent' in element.tag:
         return Azurehome(element.attrib['id'])
+    elif 'scriptTask' in element.tag:
+        return CloudServices(element.attrib['id'])
+    elif 'boundaryEvent' in element.tag:
+        return MachineLearningStudioWebServicePlans(element.attrib['id'])
     else:
         return DataLakeAnalytics(element.attrib['id'])
 
