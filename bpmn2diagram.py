@@ -12,6 +12,7 @@ from diagrams.azure.analytics import DataLakeAnalytics
 from diagrams.onprem.network import Internet
 from diagrams.azure.compute import CloudServices
 from diagrams.azure.ml import MachineLearningStudioWebServicePlans
+from diagrams.onprem.database import Mongodb
 
 parser = argparse.ArgumentParser()
 parser.add_argument('bpmn')
@@ -37,8 +38,11 @@ path = {}
 
 def icon(element):
     if 'serviceTask' in element.tag:
-        if '{http://activiti.org/bpmn}delegateExpression' in element.attrib and element.attrib['{http://activiti.org/bpmn}delegateExpression'] == '${httpRequestorTask}':
-            return Internet(element.attrib['id'])
+        if '{http://activiti.org/bpmn}delegateExpression' in element.attrib:
+            if element.attrib['{http://activiti.org/bpmn}delegateExpression'] == '${httpRequestorTask}':
+                return Internet(element.attrib['id'])
+            elif element.attrib['{http://activiti.org/bpmn}delegateExpression'] in ['${updateScimUserTask}', '${createScimUserTask}']:
+                return Mongodb(element.attrib['id'])
         return EC2(element.attrib['id'])
     elif 'userTask' in element.tag:
         return User(element.attrib['id'])
